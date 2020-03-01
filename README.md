@@ -10,6 +10,7 @@
 Open questions about scope of modules:
 
 * How to query data (is this sensible for arrays?)
+* Idea for form fields
 
 ## Docs on how to implement fields
 
