@@ -11,6 +11,11 @@ Open questions about scope of modules:
 
 * How to query data (is this sensible for arrays?)
 
+## Docs on how to implement fields
+
+* https://docs.djangoproject.com/en/dev/howto/custom-model-fields/
+* https://github.com/django/django/blob/master/django/db/models/fields/__init__.py
+
 ## Install
 Install via pip
 ```bash
