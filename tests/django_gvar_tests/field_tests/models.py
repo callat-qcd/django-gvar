@@ -6,5 +6,4 @@ from django_gvar.models import GVarField
 
 
 class TestTable(models.Model):
-    i = models.IntegerField()
     a = GVarField(help_text="This is a test")
