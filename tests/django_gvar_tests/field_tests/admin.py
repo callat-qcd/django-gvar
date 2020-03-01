@@ -3,7 +3,7 @@ from .models import TestTable
 
 
 class TestTableAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("id", "a")
 
 
 admin.site.register(TestTable, TestTableAdmin)
