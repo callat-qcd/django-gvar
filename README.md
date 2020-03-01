@@ -11,6 +11,7 @@ Open questions about scope of modules:
 
 * How to query data (is this sensible for arrays?)
 * Idea for form fields
+* Cross checks for string loading
 
 ## Docs on how to implement fields
 
