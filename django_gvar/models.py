@@ -26,6 +26,8 @@ class GVarField(Field):
         return "TextField"
 
     def to_python(self, value: Union[GVar, None, str]) -> GVar:
+        """Deserialze object
+        """
         if isinstance(value, GVar):
             return value
 
@@ -43,8 +45,11 @@ class GVarField(Field):
         value = self.value_from_object(obj)
         return self.get_prep_value(value)
 
-    def from_db_value(self, value: str, expression, connection):
-        """Inverse of get_prep_value().
+    @staticmethod
+    def from_db_value(value: str, expression, connection):  # pylint: disable=W0613
+        """Inverse of get_prep_value(). Called when loaded from the db
+
+        See https://stackoverflow.com/q/48008026
         """
         if value is None:
             return value
