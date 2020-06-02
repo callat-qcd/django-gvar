@@ -1,19 +1,15 @@
 """
 """
-from typing import Union, Optional
+from typing import Union
 
 from django import forms
 from django.db.models.fields import Field
-from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from gvar._gvarcore import GVar  # pylint: disable=E0611
-from gvar import dumps, loads  # pylint: disable=E0611
+from gvar import gdumps, gloads  # pylint: disable=E0611
 
-
-class GVarFormField(forms.Textarea):
-    """
-    """
+from django_gvar.utils import parse_gvar
 
 
 class GVarField(Field):
@@ -23,7 +19,7 @@ class GVarField(Field):
     description = _("GVar")
 
     def get_internal_type(self):
-        return "TextField"
+        return "JSONField"
 
     def to_python(self, value: Union[GVar, None, str]) -> GVar:
         """Deserialze object
@@ -34,10 +30,14 @@ class GVarField(Field):
         if value is None:
             return value
 
-        return loads(value)
+        if isinstance(value, str):
+            try:
+                return gloads(value)
+            except TypeError:
+                return parse_gvar(value)
 
     def get_prep_value(self, value: GVar) -> str:
-        return dumps(value)
+        return gdumps(value)
 
     def value_to_string(self, obj: GVar) -> str:
         """Serialize object
@@ -53,7 +53,7 @@ class GVarField(Field):
         """
         if value is None:
             return value
-        return loads(value)
+        return gloads(value)
 
     def formfield(self, **kwargs):
         # Passing max_length to forms.CharField means that the value's length
@@ -62,7 +62,7 @@ class GVarField(Field):
         return super().formfield(
             **{
                 "max_length": self.max_length,
-                **({} if self.choices is not None else {"widget": GVarFormField}),
+                **({} if self.choices is not None else {"widget": forms.Textarea}),
                 **kwargs,
             }
         )
