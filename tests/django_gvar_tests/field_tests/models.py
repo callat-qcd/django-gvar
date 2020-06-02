@@ -1,6 +1,6 @@
 from django.db import models
 
-from django_gvar.models import GVarField
+from django_gvar.fields import GVarField
 
 # Create your models here.
 
