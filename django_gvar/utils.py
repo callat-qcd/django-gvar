@@ -1,13 +1,9 @@
 """
 """
-import re
 from json import loads
 
-from gvar._gvarcore import GVar  # pylint: disable=E0611
-from gvar import gvar  # pylint: disable=E0611
-
-
-_NUMBERS = "[0-9\-\+\.\,eg]+"
+from gvar._gvarcore import GVar
+from gvar import gvar
 
 
 def parse_gvar(expr: str, delimeter=",", cov_split="|") -> GVar:
