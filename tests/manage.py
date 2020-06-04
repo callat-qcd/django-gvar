@@ -5,6 +5,7 @@ import sys
 
 
 def main():
+    """Runs django."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_gvar_tests.settings")
     try:
         from django.core.management import execute_from_command_line
