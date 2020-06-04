@@ -1,9 +1,10 @@
+"""Module provides models which store GVars."""
 from django.db import models
 
 from django_gvar.fields import GVarField
 
-# Create your models here.
 
+class ExampleTable(models.Model):
+    """Example table which stores a GVar field."""
 
-class TestTable(models.Model):
     a = GVarField(help_text="This is a test")
