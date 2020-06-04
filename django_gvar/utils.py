@@ -1,4 +1,7 @@
-"""
+"""Utility functions.
+
+Provides:
+    * parse_gvar to convert string to gvars
 """
 from json import loads
 
@@ -7,7 +10,8 @@ from gvar import gvar
 
 
 def parse_gvar(expr: str, delimeter=",", cov_split="|") -> GVar:
-    """
+    """Converts string to gvars.
+
     Options:
         single gvar:
             * 1(2)

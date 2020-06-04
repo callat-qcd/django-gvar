@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-"""Setup file for django_gvar
-"""
+"""Setup file for django_gvar."""
+
 __author__ = "@ckoerber"
 __version__ = "0.1.0"
 
