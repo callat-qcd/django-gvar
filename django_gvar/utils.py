@@ -4,11 +4,14 @@ Provides:
     * parse_gvar to convert string to gvars
 """
 from json import loads
+import re
 
 from numpy import ndarray, array2string
 
 from gvar._gvarcore import GVar
 from gvar import gvar, mean, evalcov
+
+SUB_TRAILING_ZERO = re.compile(r"([0-9])\.([\,\]]{1})")
 
 
 def parse_str_to_gvar(expr: str, delimeter=",", cov_split="|") -> GVar:
@@ -32,7 +35,8 @@ def parse_str_to_gvar(expr: str, delimeter=",", cov_split="|") -> GVar:
         arr = [gvar(val) for val in expr.split(delimeter)]
         out = arr[0] if len(arr) == 1 else gvar(arr)
     else:
-        out = gvar(*(loads(el) for el in expr.split(cov_split)))
+        expr = SUB_TRAILING_ZERO.sub(r"\g<1>.0\g<2>", expr)
+        out = gvar(*(loads(el.strip()) for el in expr.split(cov_split)))
 
     return out
 
