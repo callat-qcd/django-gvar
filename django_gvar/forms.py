@@ -47,7 +47,11 @@ class InvalidGVarInput(str):
 
 
 class GVarField(CharField):
-    """Class which parses input from string to gvar and vice versa."""
+    """Class which parses input from string to gvar and vice versa.
+
+    The implementation follows Djangos JSONField implementation:
+    https://github.com/django/django/blob/926148ef019abcac3a9988c78734d9336d69f24e/django/forms/fields.py#L1226
+    """
 
     default_error_messages = {
         "invalid": _("Enter a valid conversion string."),
