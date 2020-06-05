@@ -1,13 +1,41 @@
 """Provides GVar field."""
 from typing import Union
 
+from numpy import ndarray
+
 from django.db.models.fields import Field
 from django.utils.translation import gettext_lazy as _
+from django.core.validators import EMPTY_VALUES
 
 from gvar._gvarcore import GVar
 from gvar import gdumps, gloads
 
 from django_gvar.utils import parse_gvar
+
+
+class EmptyValuesWrapper:
+    """Wrapper which allows empty value checks on arrays.
+
+    In the validation process of fields (from forms), Djagno checks if the value
+    is in EMPTY_VALUES.
+    But since GVars can be arrays, the check `value in list` potentially fails.
+    This class wrapps the `in` operator such that elements of value are checked if
+    value is an array.
+    """
+
+    empty_values = EMPTY_VALUES
+
+    def __contains__(self, value):
+        """Wrap contains to allow empty checks."""
+        if isinstance(value, ndarray):
+            out = any([val in self for val in value])
+        else:
+            out = value in self.empty_values
+
+        return out
+
+
+EMPTY_VALUES_WRAPPED = EmptyValuesWrapper()
 
 
 class GVarField(Field):
@@ -18,6 +46,7 @@ class GVarField(Field):
     """
 
     description = _("GVar")
+    empty_values = EMPTY_VALUES_WRAPPED
 
     def get_internal_type(self) -> str:
         """Returns internal storage type (JSON)."""

@@ -7,4 +7,4 @@ from django_gvar.fields import GVarField
 class ExampleTable(models.Model):
     """Example table which stores a GVar field."""
 
-    a = GVarField(help_text="This is a test")
+    a = GVarField(help_text="Test field for GVars")
