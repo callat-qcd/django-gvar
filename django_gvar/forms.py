@@ -8,7 +8,7 @@ from numpy import ndarray
 from django.core.exceptions import ValidationError
 from django.core.validators import EMPTY_VALUES
 from django.forms import Textarea
-from django.forms.fields import CharField
+from django.forms.fields import JSONField
 from django.utils.translation import gettext_lazy as _
 
 from gvar._gvarcore import GVar
@@ -46,7 +46,7 @@ class InvalidGVarInput(str):
     """Wrap input which is not convertable."""
 
 
-class GVarField(CharField):
+class GVarField(JSONField):
     """Class which parses input from string to gvar and vice versa.
 
     The implementation follows Djangos JSONField implementation:
@@ -72,7 +72,7 @@ class GVarField(CharField):
             return parse_str_to_gvar(value)
         except (JSONDecodeError, ValueError) as e:
             raise ValidationError(
-                self.error_messages["invalid"],
+                self.error_messages["invalid"] + "\n" + str(e),
                 code="invalid",
                 params={"value": value, "exception": e},
             )

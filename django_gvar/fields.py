@@ -1,59 +1,78 @@
 """Provides GVar field."""
-from typing import Union
+from typing import Optional
 
-from numpy import ndarray
+from json import JSONDecodeError
 
-from django.db.models.fields import Field
-from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
+from django.db.models.fields.json import JSONField
+from django.utils.translation import gettext_lazy as _
 
 from gvar._gvarcore import GVar
-from gvar import gdumps, gloads, BufferDict
+from gvar import gdumps, gloads
+from gvar import __version__ as gvar_version_imported
 
 from django_gvar.forms import GVarField as GVarFormField
 from django_gvar.forms import EMPTY_VALUES_WRAPPED
 
 
-class GVarField(Field):
+class GVarField(JSONField):
     """Field which stores gvars as TextFields.
 
     The database storage type are JSONFields.
     Internally, this class uses `gvar.gdumps` to store and `gvar.gloads` to load in data.
+
+    This class is follows Djangos JSONField:
+    https://github.com/django/django/blob/926148ef019abcac3a9988c78734d9336d69f24e/django/db/models/fields/json.py#L16
     """
 
     description = _("GVar")
     empty_values = EMPTY_VALUES_WRAPPED
 
+    def __init__(
+        self,
+        verbose_name=None,
+        name=None,
+        encoder=None,
+        decoder=None,
+        gvar_version: Optional[str] = None,
+        **kwargs,
+    ):
+        """Overloads default JSONField field by providing gvar version."""
+        self.gvar_version = gvar_version or gvar_version_imported
+        super().__init__(verbose_name, name, encoder=encoder, decoder=decoder, **kwargs)
+
+    def deconstruct(self):
+        """Adds gvar version to deconstruction."""
+        name, path, args, kwargs = super().deconstruct()
+        kwargs["gvar_version"] = gvar_version_imported
+        return name, path, args, kwargs
+
     def get_internal_type(self) -> str:
         """Returns internal storage type (JSON)."""
         return "JSONField"
 
-    def to_python(self, value: Union[GVar, None, str]) -> GVar:
-        """Deserialzes object to GVar.
-
-        Logic for deserialization:
-        1. return if already a GVar
-        2. return if None
-        3. try `gloads` if string
-        """
+    def get_prep_value(self, value: GVar) -> Optional[str]:
+        """Dumps data to JSON using `gdumps`."""
         if value is None:
             return value
-        elif isinstance(value, (GVar, ndarray, dict, BufferDict)):
-            return value
-
-        try:
-            return gloads(value)
-        except TypeError as e:
-            raise ValidationError(str(e), code="invalid", params={"value": value})
-
-    def get_prep_value(self, value: GVar) -> str:
-        """Dumps data to JSON using `gdumps`."""
         return gdumps(value)
 
     def value_to_string(self, obj: GVar) -> str:
         """Serializes object by calling `get_prep_value`."""
         value = self.value_from_object(obj)
         return self.get_prep_value(value)
+
+    def validate(self, value: GVar, model_instance):
+        """Validates value by executing a dump."""
+        super(JSONField, self).validate(value, model_instance)
+        try:
+            gdumps(value)
+        except ValidationError as e:
+            raise TypeError(
+                self.error_messages["invalid"] + "\n" + str(e),
+                code="invalid",
+                params={"value": value, "error": e},
+            )
 
     @staticmethod
     def from_db_value(value: str, expression, connection):
@@ -64,7 +83,11 @@ class GVarField(Field):
         """
         if value is None:
             return value
-        return gloads(value)
+
+        try:
+            return gloads(value)
+        except (JSONDecodeError, ValueError):
+            return value
 
     def formfield(self, **kwargs):
         """Change widget to text area."""
