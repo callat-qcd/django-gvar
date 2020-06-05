@@ -51,7 +51,7 @@ class GVarField(CharField):
         "invalid": _("Enter a valid conversion string."),
     }
     widget = Textarea
-    empty_values = EMPTY_VALUES
+    empty_values = EMPTY_VALUES_WRAPPED
 
     def to_python(self, value):
         """Tries to convert value to GVar."""

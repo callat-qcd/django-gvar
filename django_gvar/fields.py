@@ -11,6 +11,7 @@ from gvar._gvarcore import GVar
 from gvar import gdumps, gloads, BufferDict
 
 from django_gvar.forms import GVarField as GVarFormField
+from django_gvar.forms import EMPTY_VALUES_WRAPPED
 
 
 class GVarField(Field):
@@ -21,6 +22,7 @@ class GVarField(Field):
     """
 
     description = _("GVar")
+    empty_values = EMPTY_VALUES_WRAPPED
 
     def get_internal_type(self) -> str:
         """Returns internal storage type (JSON)."""
