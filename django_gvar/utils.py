@@ -5,14 +5,13 @@ Provides:
 """
 from json import loads
 
-from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
+from numpy import ndarray, array2string
 
 from gvar._gvarcore import GVar
-from gvar import gvar
+from gvar import gvar, mean, evalcov
 
 
-def parse_gvar(expr: str, delimeter=",", cov_split="|") -> GVar:
+def parse_str_to_gvar(expr: str, delimeter=",", cov_split="|") -> GVar:
     """Converts string to gvars.
 
     Options:
@@ -24,17 +23,33 @@ def parse_gvar(expr: str, delimeter=",", cov_split="|") -> GVar:
             * [1, 3, 5, ...] | [2, 4, 6, ...]
         multiple correlated:
             * [1, 3, 5...] | [[2, 4, 6, ...], []]
+
+    Todo:
+        Support buffer dicts
     """
     expr = expr.strip()
-    try:
-        if "(" in expr:
-            arr = [gvar(val) for val in expr.split(delimeter)]
-            out = arr[0] if len(arr) == 1 else gvar(arr)
-        else:
-            out = gvar(*(loads(el) for el in expr.split(cov_split)))
-    except Exception as e:
-        raise ValidationError(
-            _("Failed to parse GVars. Here are the details:\n") + str(e)
-        )
+    if "(" in expr:
+        arr = [gvar(val) for val in expr.split(delimeter)]
+        out = arr[0] if len(arr) == 1 else gvar(arr)
+    else:
+        out = gvar(*(loads(el) for el in expr.split(cov_split)))
 
     return out
+
+
+def parse_gvar_to_str(obj: GVar) -> str:
+    """Inverts `parse_str_to_gvar`."""
+    if obj is None:
+        return ""
+    elif isinstance(obj, str):
+        return obj
+    elif isinstance(obj, ndarray):
+        return (
+            array2string(mean(obj), separator=",", formatter={"float": str})
+            + " | "
+            + array2string(evalcov(obj), separator=",", formatter={"float": str})
+        )
+    elif isinstance(obj, GVar):
+        return str(mean(obj)) + " | " + str(evalcov(obj))
+    else:
+        raise TypeError(f"Cannot parse {obj} ({type(obj)}) to str")

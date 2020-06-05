@@ -5,37 +5,12 @@ from numpy import ndarray
 
 from django.db.models.fields import Field
 from django.utils.translation import gettext_lazy as _
-from django.core.validators import EMPTY_VALUES
+from django.core.exceptions import ValidationError
 
 from gvar._gvarcore import GVar
-from gvar import gdumps, gloads
+from gvar import gdumps, gloads, BufferDict
 
-from django_gvar.utils import parse_gvar
-
-
-class EmptyValuesWrapper:
-    """Wrapper which allows empty value checks on arrays.
-
-    In the validation process of fields (from forms), Djagno checks if the value
-    is in EMPTY_VALUES.
-    But since GVars can be arrays, the check `value in list` potentially fails.
-    This class wrapps the `in` operator such that elements of value are checked if
-    value is an array.
-    """
-
-    empty_values = EMPTY_VALUES
-
-    def __contains__(self, value):
-        """Wrap contains to allow empty checks."""
-        if isinstance(value, ndarray):
-            out = any([val in self for val in value])
-        else:
-            out = value in self.empty_values
-
-        return out
-
-
-EMPTY_VALUES_WRAPPED = EmptyValuesWrapper()
+from django_gvar.forms import GVarField as GVarFormField
 
 
 class GVarField(Field):
@@ -46,7 +21,6 @@ class GVarField(Field):
     """
 
     description = _("GVar")
-    empty_values = EMPTY_VALUES_WRAPPED
 
     def get_internal_type(self) -> str:
         """Returns internal storage type (JSON)."""
@@ -59,19 +33,16 @@ class GVarField(Field):
         1. return if already a GVar
         2. return if None
         3. try `gloads` if string
-        4. try `django_gvar.utils.parse_gvar` if gloads raises a TypeError
         """
-        if isinstance(value, GVar):
-            return value
-
         if value is None:
             return value
+        elif isinstance(value, (GVar, ndarray, dict, BufferDict)):
+            return value
 
-        if isinstance(value, str):
-            try:
-                return gloads(value)
-            except TypeError:
-                return parse_gvar(value)
+        try:
+            return gloads(value)
+        except TypeError as e:
+            raise ValidationError(str(e), code="invalid", params={"value": value})
 
     def get_prep_value(self, value: GVar) -> str:
         """Dumps data to JSON using `gdumps`."""
@@ -92,3 +63,9 @@ class GVarField(Field):
         if value is None:
             return value
         return gloads(value)
+
+    def formfield(self, **kwargs):
+        """Change widget to text area."""
+        defaults = {"form_class": GVarFormField}
+        defaults.update(kwargs)
+        return super().formfield(**defaults)
