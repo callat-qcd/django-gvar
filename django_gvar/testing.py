@@ -1,9 +1,49 @@
 """Utility functions for checking gvar fields."""
 
 from numpy.testing import assert_allclose as assert_array_allclose
+from numpy import allclose as array_allclose
 
 from gvar._gvarcore import GVar
 from gvar import mean, sdev, evalcov
+
+
+def allclose(
+    actual: GVar,
+    desired: GVar,
+    rtol: float = 1e-07,
+    atol: float = 0,
+    equal_nan: bool = True,
+    test_cov: bool = True,
+):
+    """Runs numpys all close on mean, sdev and covariance of gvars.
+
+    Arguments:
+        actual, desired: To be tested GVars, can be numbers, arrays or dicts
+        see numpy.allclose
+        test_cov: If true, also checks if covariance is equal up to request precision.
+    """
+    are_allclose = True
+    if hasattr(actual, "keys") and hasattr(actual, "keys"):
+        if set(actual.keys()) == set(desired.keys()):
+            for key, val in actual.items():
+                are_allclose &= array_allclose(
+                    val, desired[key], rtol=rtol, atol=atol, equal_nan=equal_nan,
+                )
+                if not are_allclose:
+                    break
+        else:
+            are_allclose = False
+    else:
+
+        tests = [mean, sdev] + ([evalcov] if test_cov else [])
+        for attr in tests:
+            are_allclose &= array_allclose(
+                attr(actual), attr(desired), rtol=rtol, atol=atol, equal_nan=equal_nan,
+            )
+            if not are_allclose:
+                break
+
+    return are_allclose
 
 
 def assert_allclose(
@@ -16,7 +56,7 @@ def assert_allclose(
     verbose: bool = True,
     test_cov: bool = True,
 ):
-    """Runs numpys all close on mean, sdev and covariance of gvars.
+    """Runs numpys assert all close on mean, sdev and covariance of gvars.
 
     Arguments:
         actual, desired: To be tested GVars, can be numbers, arrays or dicts

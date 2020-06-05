@@ -1,4 +1,6 @@
 """Input converter for db field."""
+from typing import Union, Optional
+
 from json import JSONDecodeError
 
 from numpy import ndarray
@@ -11,7 +13,7 @@ from django.utils.translation import gettext_lazy as _
 
 from gvar._gvarcore import GVar
 
-from django_gvar.testing import assert_allclose
+from django_gvar.testing import allclose
 from django_gvar.utils import parse_str_to_gvar, parse_gvar_to_str
 
 
@@ -53,7 +55,7 @@ class GVarField(CharField):
     widget = Textarea
     empty_values = EMPTY_VALUES_WRAPPED
 
-    def to_python(self, value):
+    def to_python(self, value: Union[GVar, str, None]) -> Optional[GVar]:
         """Tries to convert value to GVar."""
         if self.disabled:
             return value
@@ -71,7 +73,8 @@ class GVarField(CharField):
                 params={"value": value, "exception": e},
             )
 
-    def bound_data(self, data, initial):
+    def bound_data(self, data: str, initial: GVar) -> Union[GVar, InvalidGVarInput]:
+        """Parses string to GVar if possible. Else keeps invalid string input."""
         if self.disabled:
             return initial
         try:
@@ -79,12 +82,12 @@ class GVarField(CharField):
         except (JSONDecodeError, ValueError):
             return InvalidGVarInput(data)
 
-    def prepare_value(self, value):
-        if isinstance(value, InvalidGVarInput):
-            return value
-        return parse_gvar_to_str(value)
+    def prepare_value(self, value: Union[GVar, InvalidGVarInput]) -> str:
+        """Parses GVar to string if string is not invalid."""
+        return (
+            value if isinstance(value, InvalidGVarInput) else parse_gvar_to_str(value)
+        )
 
-    def has_changed(self, initial, data):
-        if self.disabled:
-            return False
-        return not assert_allclose(initial, self.to_python(data))
+    def has_changed(self, initial: GVar, data):
+        """Checks if input and initial gvars differ using asser allclose."""
+        return False if self.disabled else not allclose(initial, self.to_python(data))
