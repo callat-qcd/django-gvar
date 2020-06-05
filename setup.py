@@ -2,11 +2,12 @@
 """Setup file for django_gvar."""
 
 __author__ = "@ckoerber"
-__version__ = "0.1.0"
 
 from os import path
 
 from setuptools import setup, find_packages
+
+from django_gvar import __version__
 
 CWD = path.abspath(path.dirname(__file__))
 
