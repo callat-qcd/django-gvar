@@ -6,7 +6,7 @@ And of course, please make sure you are welcoming and friendly (see also the [Py
 
 ## Guiding principles
 
-This module is an open-source project which incorporates [G. Peter Lepage's gaussian random variables](https://github.com/gplepage/gvar) in [Django](https://www.djangoproject.com)'s ORM.
+This module is an open-source project which incorporates [G. Peter Lepage's Gaussian random variables](https://github.com/gplepage/gvar) in [Django](https://www.djangoproject.com)'s ORM.
 Hence, it is one of our guiding principles to stay as close as possible to both packages, which allows utilizing existing functionality, resources, and staying compatible as much as possible.
 
 ## What we are looking for
@@ -40,15 +40,15 @@ In this context, we also appreciate formatting along the lines of [black---the u
 
 Before you submit pull requests, please:
 
-1. make sure all tests work
+###### 1. Make sure all tests work
 ```bash
 pytest tests/
 ```
-2. the code is linted and
+###### 2. The code is linted and
 ```bash
 flake8
 ```
-3. the code is formatted
+###### 3. The code is formatted
 ```bash
 black --check .
 ```
