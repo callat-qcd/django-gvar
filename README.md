@@ -35,6 +35,3 @@ pip install [-e] [--user] .
 * [@ckoerber](https://www.ckoerber.com)
 
 ## Contribute
-
-## License
-See [LICENSE.md](LICENSE.md)
