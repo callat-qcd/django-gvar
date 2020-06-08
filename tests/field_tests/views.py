@@ -8,7 +8,11 @@ from field_tests.models import ExampleTable
 
 
 class ExampleForm(ModelForm):
+    """Form for example table's GVarField."""
+
     class Meta:
+        """Specification of form model and widget."""
+
         model = ExampleTable
         fields = ["a"]
         widgets = {
@@ -35,14 +39,19 @@ class IndexView(FormView):
         return context
 
     def form_valid(self, form):
+        """Save model instance if form is valid."""
         form.save()
         return super().form_valid(form)
 
 
 class DeleteAllView(View):
+    """POST only view for deleting all ExampleTable model entries."""
+
     def get(self, request):
+        """Not accessible over GET request."""
         return HttpResponseNotFound()
 
     def post(self, request):
+        """Delete all present ExampleTable entries."""
         ExampleTable.objects.all().delete()
         return HttpResponseRedirect("/")
