@@ -1,6 +1,8 @@
 """Views of test project."""
+from django.views import View
 from django.views.generic.edit import FormView
 from django.forms import ModelForm, Textarea
+from django.http import HttpResponseNotFound, HttpResponseRedirect
 
 from field_tests.models import ExampleTable
 
@@ -35,3 +37,12 @@ class IndexView(FormView):
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
+
+
+class DeleteAllView(View):
+    def get(self, request):
+        return HttpResponseNotFound()
+
+    def post(self, request):
+        ExampleTable.objects.all().delete()
+        return HttpResponseRedirect("/")

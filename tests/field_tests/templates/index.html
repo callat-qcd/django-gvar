@@ -34,15 +34,20 @@
         <div>
             <h4>Stored entries</h4>
             {% if entries %}
-            <ul class="list-group">
-                {% for entry in entries %}
-                <li class="list-group-item"><code>{{entry.a}}</code></li>
-                {% endfor entries %}
-            </ul>
-            {% else %}
-            <p>No entries present</p>
-            {% endif %}
+            <form method="post" action="{% url 'delete' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger mb-2" value="Delete">Delete all</button>
+            </form>
         </div>
+        <ul class="list-group">
+            {% for entry in entries %}
+            <li class="list-group-item"><code>{{entry.a}}</code></li>
+            {% endfor entries %}
+        </ul>
+        {% else %}
+        <p>No entries present</p>
+        {% endif %}
+    </div>
     </div>
 </body>
 
