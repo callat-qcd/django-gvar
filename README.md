@@ -7,11 +7,11 @@
 ## Description
 
 `django-gvar` allows to store [multi-dimensional Gaussian random variables implemented by G. Peter Lepage's `gvar` module](https://github.com/gplepage/gvar) into [Django](https://www.djangoproject.com)'s ORM Framework.
-It adds a `GVarField` which can be used to store individual GVars, arrays of GVars and Dictionaries of GVars.
+It adds a `GVarField`, which can be used to store individual GVars, arrays of GVars, and Dictionaries of GVars.
 
 ### Usage in scripts
 
-Import the `GVarField` field into your project and use it out-of-the-box as for example a `FloatField`.
+Import the `GVarField` field into your project and use it out-of-the-box as, for example, a `FloatField`.
 
 ```python
 # myproject.models.py
@@ -33,15 +33,15 @@ entry.save()
 
 ### Usage in forms
 
-For web-froms, the default widget for `GVarField`s are text areas.
+For web-forms, the default widget for `GVarField`s are text areas.
 Currently, the form supports single numbers and arrays as input.
 These forms utilize custom syntax to convert the input to `GVars`:
 
-* GVars without correlations are can specified by lists of numbers where parenthesis specify standard deviations
+* GVars without correlations are can specified by lists of numbers where parenthesis define standard deviations
 ```text
 1(2), 3(4), ...
 ```
-* GVars with correlations are specified as arrays of mean values and the covariance matrix seperated by a `|`
+* GVars with correlations are specified as arrays of mean values and the covariance matrix separated by a `|`
 ```text
 [1, 2] | [[1, 2], [2, 3]]
 ```
@@ -60,13 +60,13 @@ Once established, the dependencies will be updated accordingly.
 
 ## Details
 
-The underlaying database type for `django-gvar` are `JSONField`s.
+The underlying database type for `django-gvar`s are `JSONField`s.
 It uses `gvars` `gdumps` and `gloads` to generate corresponding `JSON`.
-More details can be found in the [docs]().
+The [project documentation]() specifies more details.
 
 ## Examples
 
-The `tests` directory implement a simple Django app using the `GVarField`s.
+The `tests` directory implements a simple Django app using the `GVarField`s.
 To start it, install the repo as specified above and run
 ```bash
 cd tests
