@@ -1,2 +1,2 @@
 [run]
-omit = django_gvar/testing.py
+omit = */testing.py

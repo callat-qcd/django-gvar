@@ -1,4 +1,4 @@
-[![Run tests](https://github.com/callat-qcd/django-gvar/workflows/Run%20tests/badge.svg)](https://github.com/callat-qcd/django-gvar/workflows/Run%20tests)
+[![Code Coverage](https://codecov.io/gh/callat-qcd/django-gvar/branch/master/graph/badge.svg)](https://codecov.io/gh/callat-qcd/django-gvar)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 
