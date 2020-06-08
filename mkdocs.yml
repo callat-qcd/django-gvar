@@ -1,4 +1,7 @@
 site_name: django-gvar
+repo_url: https://github.com/callat-qcd/django-gvar/
+site_author: "@ckoerber"
+site_description: "Django extension which adds model fields to store multi-dimensional Gaussian random variables."
 nav:
     - Home: index.md
     - Details: details.md
