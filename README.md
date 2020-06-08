@@ -1,3 +1,4 @@
+[![Documentation Status](https://readthedocs.org/projects/django-gvar/badge/?version=latest)](https://django-gvar.readthedocs.io/en/latest/?badge=latest)
 [![Code Coverage](https://codecov.io/gh/callat-qcd/django-gvar/branch/master/graph/badge.svg)](https://codecov.io/gh/callat-qcd/django-gvar)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
