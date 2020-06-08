@@ -1,6 +1,8 @@
 site_name: django-gvar
 nav:
     - Home: index.md
+    - Usage: usage.md
+    - Details: details.md
     - Contributing: contributing.md
     - License: license.md
 theme: readthedocs
