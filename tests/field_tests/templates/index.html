@@ -1,28 +1,54 @@
 <!DOCTYPE html>
 <html>
 
-<body>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
 
-    <h1>Hello world</h1>
-    <div>
-        <form method="post">
-            {% csrf_token %}
-            {{ form }}
-            <input type="submit" value="Submit">
-        </form>
+<body>
+    <div class="jumbotron">
+        <h1><code>django-gvar</code> field example</h1>
+        <h4>
+            Try out entering Gaussian entering random numbers
+        </h4>
     </div>
-    <br>
-    <div>
-        {% if entries %}
-        <ul>
-            {% for entry in entries %}
-            <li>{{entry.a}}</li>
-            {% endfor  entries %}
-        </ul>
-        {% else %}
-        <p>No entries present</p>
-        {% endif %}
+    <div class="container">
+        <div>
+            <form method="post">
+                <div class="form-group">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {% if form.a.errors %}
+                        <div class="alert alert-danger" role="alert">.
+                            {{ form.a.errors }}
+                        </div>
+                        {% endif %}
+                        <label for="{{ form.a.id_for_label }}">Try entering numbers:</label>
+                        {{ form.a }}
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2" value="Submit">Submit</button>
+                </div>
+            </form>
+        </div>
+        <br>
+        <div>
+            <h4>Stored entries</h4>
+            {% if entries %}
+            <ul class="list-group">
+                {% for entry in entries %}
+                <li class="list-group-item"><code>{{entry.a}}</code></li>
+                {% endfor entries %}
+            </ul>
+            {% else %}
+            <p>No entries present</p>
+            {% endif %}
+        </div>
     </div>
 </body>
 
 </html>
+
+
+<div class="form-group">
+
+</div>
