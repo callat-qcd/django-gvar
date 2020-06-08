@@ -46,7 +46,7 @@ class InvalidGVarInput(str):
     """Wrap input which is not convertable."""
 
 
-class GVarField(JSONField):
+class GVarFormField(JSONField):
     """Class which parses input from string to gvar and vice versa.
 
     The implementation follows Djangos JSONField implementation:

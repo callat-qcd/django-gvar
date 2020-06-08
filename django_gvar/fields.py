@@ -11,7 +11,7 @@ from gvar._gvarcore import GVar
 from gvar import gdumps, gloads
 from gvar import __version__ as gvar_version_imported
 
-from django_gvar.forms import GVarField as GVarFormField
+from django_gvar.forms import GVarFormField
 from django_gvar.forms import EMPTY_VALUES_WRAPPED
 
 

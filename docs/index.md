@@ -33,6 +33,8 @@ entry.save()
 
 ### Usage in forms
 
+![Example form usage](img/example.gif)
+
 For web-forms, the default widget for `GVarField`s are text areas.
 Currently, the form supports single numbers and arrays as input.
 These forms utilize custom syntax to convert the input to `GVars`:
