@@ -11,7 +11,7 @@ It adds a `GVarField`, which can be used to store individual GVars, arrays of GV
 
 ### Usage in scripts
 
-Import the `GVarField` field into your project and use it out-of-the-box as, for example, a `FloatField`.
+After pip-installing the module, import the `GVarField` field into your project and use it out-of-the-box
 
 ```python
 # myproject.models.py
