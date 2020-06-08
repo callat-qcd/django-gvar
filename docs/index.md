@@ -1,3 +1,4 @@
+[![Documentation Status](https://readthedocs.org/projects/django-gvar/badge/?version=latest)](https://django-gvar.readthedocs.io/en/latest/?badge=latest)
 [![Code Coverage](https://codecov.io/gh/callat-qcd/django-gvar/branch/master/graph/badge.svg)](https://codecov.io/gh/callat-qcd/django-gvar)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
@@ -6,12 +7,12 @@
 
 ## Description
 
-`django-gvar` allows to store [multi-dimensional Gaussian random variables implemented by G. Peter Lepage's `gvar` module](https://github.com/gplepage/gvar) into [Django](https://www.djangoproject.com)'s ORM Framework.
+`django-gvar` is a Python module which allows to store [multi-dimensional Gaussian random variables implemented by G. Peter Lepage's `gvar` module](https://github.com/gplepage/gvar) into [Django](https://www.djangoproject.com)'s ORM Framework.
 It adds a `GVarField`, which can be used to store individual GVars, arrays of GVars, and Dictionaries of GVars.
 
 ### Usage in scripts
 
-After pip-installing the module, import the `GVarField` field into your project and use it out-of-the-box
+After pip-installing the module, import the `GVarField` field into your project and use it out-of-the-box (changing settings is not required)
 
 ```python
 # myproject.models.py
@@ -22,6 +23,7 @@ class ExampleTable(models.Model):
     a = GVarField()
 ```
 
+After migrating new table definitions, the `GVarField` can be used as any other field in external scripts
 ```python
 from gvar import gvar
 from myproject.models import ExampleTable
