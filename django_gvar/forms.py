@@ -65,7 +65,7 @@ class GVarFormField(JSONField):
             return value
         elif value in self.empty_values:
             return None
-        elif isinstance(value, (GVar, ndarray)):
+        elif isinstance(value, (GVar, ndarray)):  # Not sure if this can actually happen
             return value
 
         try:
