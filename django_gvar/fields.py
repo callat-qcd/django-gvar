@@ -67,15 +67,14 @@ class GVarField(JSONField):
         super(JSONField, self).validate(value, model_instance)
         try:
             gdumps(value)
-        except ValidationError as e:
-            raise TypeError(
+        except TypeError as e:
+            raise ValidationError(
                 self.error_messages["invalid"] + "\n" + str(e),
                 code="invalid",
                 params={"value": value, "error": e},
             )
 
-    @staticmethod
-    def from_db_value(value: str, expression, connection):
+    def from_db_value(self, value: str, expression, connection):
         """Inverse of `get_prep_value()`.
 
         Called when loaded from the db.
@@ -86,7 +85,7 @@ class GVarField(JSONField):
 
         try:
             return gloads(value)
-        except (JSONDecodeError, ValueError):
+        except (JSONDecodeError, ValueError, TypeError):
             return value
 
     def formfield(self, **kwargs):

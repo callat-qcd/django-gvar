@@ -14,7 +14,7 @@ from django.utils.translation import gettext_lazy as _
 from gvar._gvarcore import GVar
 
 from django_gvar.testing import allclose
-from django_gvar.utils import parse_str_to_gvar, parse_gvar_to_str
+from django_gvar.parser import parse_str_to_gvar, parse_gvar_to_str
 
 
 class EmptyValuesWrapper:
@@ -65,7 +65,7 @@ class GVarFormField(JSONField):
             return value
         elif value in self.empty_values:
             return None
-        elif isinstance(value, (GVar, ndarray)):
+        elif isinstance(value, (GVar, ndarray)):  # Not sure if this can actually happen
             return value
 
         try:
@@ -86,9 +86,12 @@ class GVarFormField(JSONField):
         except (JSONDecodeError, ValueError):
             return InvalidGVarInput(data)
 
-    def prepare_value(self, value: Union[GVar, InvalidGVarInput]) -> str:
+    def prepare_value(self, value: GVar) -> str:
         """Parses GVar to string if string is not invalid."""
-        return value if isinstance(value, InvalidGVarInput) else parse_gvar_to_str(value)
+        try:
+            return parse_gvar_to_str(value)
+        except (ValueError, TypeError):
+            return value
 
     def has_changed(self, initial: GVar, data):
         """Checks if input and initial gvars differ using asser allclose."""
