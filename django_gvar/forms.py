@@ -86,9 +86,12 @@ class GVarFormField(JSONField):
         except (JSONDecodeError, ValueError):
             return InvalidGVarInput(data)
 
-    def prepare_value(self, value: Union[GVar, InvalidGVarInput]) -> str:
+    def prepare_value(self, value: GVar) -> str:
         """Parses GVar to string if string is not invalid."""
-        return value if isinstance(value, InvalidGVarInput) else parse_gvar_to_str(value)
+        try:
+            return parse_gvar_to_str(value)
+        except (ValueError, TypeError):
+            return value
 
     def has_changed(self, initial: GVar, data):
         """Checks if input and initial gvars differ using asser allclose."""
