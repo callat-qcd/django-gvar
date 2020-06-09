@@ -20,13 +20,24 @@ test:
 coverage:
 	pytest --cov=django_gvar/ tests/
 
-VERSIONFILE:=django_gvar/_version.py
-VERSION:=$(shell cat $(VERSIONFILE))
+
+VERSION:=$(shell python setup.py --version)
+
+version:
+	@echo $(VERSION)
 
 create-dist: all
 	python -m pip install --upgrade setuptools wheel twine
 	python setup.py sdist bdist_wheel
 
 pypi-test-upload: create-dist
+	@echo "---------------------------------------------------------"
 	@echo "Start uploading djang-gvar version ${VERSION} to testpypi"
+	@echo "---------------------------------------------------------"
 	# python -m upload --repositiory testpypi dist/django_gvar-${VERSION}*
+
+pypi-main-upload: pypi-test-upload
+	@echo"---------------------------------------------------------"
+	@echo "Start uploading djang-gvar version ${VERSION} to mainpypi"
+	@echo"---------------------------------------------------------"
+	# python -m upload dist/django_gvar-${VERSION}*
