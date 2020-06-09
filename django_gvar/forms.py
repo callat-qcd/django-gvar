@@ -14,7 +14,7 @@ from django.utils.translation import gettext_lazy as _
 from gvar._gvarcore import GVar
 
 from django_gvar.testing import allclose
-from django_gvar.utils import parse_str_to_gvar, parse_gvar_to_str
+from django_gvar.parser import parse_str_to_gvar, parse_gvar_to_str
 
 
 class EmptyValuesWrapper:
