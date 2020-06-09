@@ -37,7 +37,8 @@ class GVarFormFieldTestCase(TestCase):
 
     def test_1_form_with_inital_gvars(self):
         """Tests if form realizes it's empty."""
-        instance = ExampleTable(a=gvar(1, 2)).save()
+        instance = ExampleTable(a=gvar(1, 2))
+        instance.save()
         form_data = {"a": instance.a}
         form = ExampleForm(data=form_data, instance=instance)
         self.assertTrue(form.is_valid())
