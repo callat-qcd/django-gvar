@@ -1,5 +1,6 @@
 """Tests for GVar field."""
 from django.test import TestCase
+from django.core.exceptions import ValidationError
 
 from gvar import gvar, BufferDict
 
@@ -72,3 +73,8 @@ class GvarFieldFunctionalityTestCase(TestCase):
 
         obj = "1.0 2.0"
         self.assertIs(self.field.from_db_value(obj, None, None), obj)
+
+    def test_1_inserting_fails(self):
+        """Checks that field cleaning raises validation error for non-gvars."""
+        with self.assertRaises(ValidationError):
+            self.field.clean(1.0, None)

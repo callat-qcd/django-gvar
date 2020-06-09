@@ -67,8 +67,8 @@ class GVarField(JSONField):
         super(JSONField, self).validate(value, model_instance)
         try:
             gdumps(value)
-        except ValidationError as e:
-            raise TypeError(
+        except TypeError as e:
+            raise ValidationError(
                 self.error_messages["invalid"] + "\n" + str(e),
                 code="invalid",
                 params={"value": value, "error": e},
