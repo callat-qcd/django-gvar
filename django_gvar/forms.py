@@ -46,7 +46,7 @@ class InvalidGVarInput(str):
     """Wrap input which is not convertable."""
 
 
-class GVarField(JSONField):
+class GVarFormField(JSONField):
     """Class which parses input from string to gvar and vice versa.
 
     The implementation follows Djangos JSONField implementation:
@@ -88,9 +88,7 @@ class GVarField(JSONField):
 
     def prepare_value(self, value: Union[GVar, InvalidGVarInput]) -> str:
         """Parses GVar to string if string is not invalid."""
-        return (
-            value if isinstance(value, InvalidGVarInput) else parse_gvar_to_str(value)
-        )
+        return value if isinstance(value, InvalidGVarInput) else parse_gvar_to_str(value)
 
     def has_changed(self, initial: GVar, data):
         """Checks if input and initial gvars differ using asser allclose."""
