@@ -6,7 +6,7 @@ __author__ = "@ckoerber"
 from os import path
 from re import search, M
 
-from setuptools import setup, find_packages
+from setuptools import setup
 
 CWD = path.abspath(path.dirname(__file__))
 
@@ -42,9 +42,9 @@ setup(
     long_description_content_type="text/markdown",
     url=None,
     author=__author__,
-    author_email=None,
+    author_email="software@ckoerber.com",
     keywords=[],
-    packages=find_packages(exclude=["docs", "tests"]),
+    packages=["django_gvar"],
     install_requires=REQUIREMENTS,
     extras_require={"dev": REQUIREMENTS_DEV},
 )
