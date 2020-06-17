@@ -34,10 +34,10 @@ pypi-test-upload: create-dist
 	@echo "---------------------------------------------------------"
 	@echo "Start uploading djang-gvar version ${VERSION} to testpypi"
 	@echo "---------------------------------------------------------"
-	# python -m upload --repositiory testpypi dist/django_gvar-${VERSION}*
+	python -m twine upload --repository testpypi dist/django_gvar-${VERSION}*
 
 pypi-main-upload: pypi-test-upload
 	@echo"---------------------------------------------------------"
 	@echo "Start uploading djang-gvar version ${VERSION} to mainpypi"
 	@echo"---------------------------------------------------------"
-	# python -m upload dist/django_gvar-${VERSION}*
+	python -m twine upload dist/django_gvar-${VERSION}*

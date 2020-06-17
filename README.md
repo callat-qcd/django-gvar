@@ -64,7 +64,7 @@ Once established, the dependencies will be updated accordingly.
 
 The underlying database type for `django-gvar`s are `JSONField`s.
 It uses `gvars` `gdumps` and `gloads` to generate corresponding `JSON`.
-The [project documentation]() specifies more details.
+The [project documentation](https://django-gvar.readthedocs.io) specifies more details.
 
 ## Examples
 
