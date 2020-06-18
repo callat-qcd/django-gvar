@@ -1,3 +1,4 @@
+[![PyPI version](https://img.shields.io/pypi/v/django-gvar.svg)](https://img.shields.io/pypi/v/django-gvar)
 [![Documentation Status](https://readthedocs.org/projects/django-gvar/badge/?version=latest)](https://django-gvar.readthedocs.io/en/latest/?badge=latest)
 [![Code Coverage](https://codecov.io/gh/callat-qcd/django-gvar/branch/master/graph/badge.svg)](https://codecov.io/gh/callat-qcd/django-gvar)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -51,9 +52,9 @@ These forms utilize custom syntax to convert the input to `GVars`:
 
 ## Install
 
-`django-gvar` can be installed from the repository root using `pip`
+`django-gvar` can be `pip` installed from the [Python package index](https://pypi.org/project/django-gvar/):
 ```bash
-pip install [-e] [--user] .
+pip install [--user] django-gvar
 ```
 
 Because it utilizes Django's `JSONField`, which is available for all database backends in Django version 3.1 (previously it was a Postgres only field), it currently depends on the development version of Django (`Django==3.1a1`).
