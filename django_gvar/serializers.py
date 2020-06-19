@@ -20,10 +20,12 @@ class GVarJSONEncoder(DjangoJSONEncoder):
         Numpy arrays are converted to list and then passed to the original JSONEncoder
         and GVars are dumped using gvar.gdumps.
         """
-        if isinstance(o, ndarray):
-            return f"array({dumps(o.tolist())})"
-        if isinstance(o, GVar):
+        if isinstance(o, GVar) or (
+            isinstance(o, ndarray) and isinstance(o.flat[0], GVar)
+        ):
             return f"gvar({gdumps(o)})"
+        elif isinstance(o, ndarray) and o.dtype is not object:
+            return f"array({dumps(o.tolist())})"
         else:
             return super().default(o)
 
@@ -39,6 +41,7 @@ def decode_objects(obj):
     elif isinstance(obj, dict):
         for key, val in obj.items():
             obj[key] = decode_objects(val)
+
     return obj
 
 
@@ -47,12 +50,15 @@ def decode_string(string):
     if match:
         if match.group(1) == "gvar":
             obj = gloads(match.group(2))
+            if isinstance(obj, ndarray) and obj.size == 1:
+                obj = obj.flat[0]
         elif match.group(1) == "array":
             obj = array(loads(match.group(2)))
         else:
             raise ValueError
     else:
         obj = string
+
     return obj
 
 
