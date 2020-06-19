@@ -22,11 +22,17 @@ coverage:
 
 
 VERSION:=$(shell python setup.py --version)
+PYPIVERSION:=$(shell curl -s 'https://pypi.org/pypi/django-gvar/json' | python -c "import sys, json; print(json.load(sys.stdin)['info']['version'])")
 
 version:
-	@echo $(VERSION)
+	@echo "Local $(VERSION)"
+	@echo "PyPi  $(PYPIVERSION)"
+
 
 create-dist: all
+ifeq ($(VERSION), $(PYPIVERSION))
+	$(error "Local version is equal to PyPi version. Abort upload")
+endif
 	python -m pip install --upgrade setuptools wheel twine
 	python setup.py sdist bdist_wheel
 
